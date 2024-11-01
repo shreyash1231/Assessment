@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+  
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=mysql://root:Shreyash1@#@db:3306/dock  # Update with your password and database name
+      - DJANGO_SECRET_KEY=your_secret_key_here  # Replace with your actual Django SECRET_KEY value
+      - FRONTEND_URL=http://localhost:3000  # Set the frontend URL or change as needed
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: dock  # Change to your database name
+      MYSQL_ROOT_PASSWORD: Shreyash1@#  # Use your database password
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
