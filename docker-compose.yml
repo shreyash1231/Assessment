@@ -1,4 +1,5 @@
-version: '3.8'
+version: '3.8'  # Specify the version of the Docker Compose file format
+
 services:
   frontend:
     build:
@@ -7,25 +8,29 @@ services:
       - "3000:3000"
     depends_on:
       - backend
-  
+
   backend:
     build:
       context: ./backend
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=mysql://root:Shreyash1@#@db:3306/dock  # Update with your password and database name
-      - DJANGO_SECRET_KEY=your_secret_key_here  # Replace with your actual Django SECRET_KEY value
-      - FRONTEND_URL=http://localhost:3000  # Set the frontend URL or change as needed
+      DATABASE_URL: mysql://root:shreyash123@db:3306/dock  # Connection string for MySQL
+      DJANGO_SECRET_KEY: your_secret_key_here  # Replace with your actual Django SECRET_KEY value
+      FRONTEND_URL: http://localhost:3000  # Ensure this matches your frontend URL in production
     depends_on:
       - db
 
   db:
     image: mysql:5.7
     environment:
-      MYSQL_DATABASE: dock  # Change to your database name
-      MYSQL_ROOT_PASSWORD: Shreyash1@#  # Use your database password
+      MYSQL_DATABASE: dock  # Database name
+      MYSQL_ROOT_PASSWORD: shreyash123  # Root password for MySQL
     ports:
-      - "3307:3306"
+      - "3308:3306"  # Map host port 3308 to container port 3306
     volumes:
-      - ./db:/docker-entrypoint-initdb.d
+      - ./db:/docker-entrypoint-initdb.d  # Initialize database from local scripts
+      - mysql_data:/var/lib/mysql  # Persist MySQL data
+
+volumes:
+  mysql_data:  # Named volume for MySQL data persistence

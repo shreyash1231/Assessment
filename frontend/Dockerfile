@@ -1,10 +1,12 @@
-# frontend/Dockerfile
 FROM node:18
-
 WORKDIR /app
-COPY . .
+COPY package*.json ./
 RUN npm install
-RUN npm run build
+
+# Copy all project files to the container
+COPY . . 
+
+RUN npm run build  # This should be after copying the source files
 
 EXPOSE 3000
 CMD ["npm", "start"]
